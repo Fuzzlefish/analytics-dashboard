@@ -1,0 +1,7 @@
+Customer ID, Purchase Amount ,Join Date,Category,EmptyCol
+1.0,100,2020-01-01,A,
+2.0,200,2020-02-15,B,
+2.0,N/A,not_a_date,,
+3.0,300,,C,
+4.0,400,2020-05-20,B,
+,500,2020-06-01,B,
