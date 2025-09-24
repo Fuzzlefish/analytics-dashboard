@@ -54,25 +54,30 @@ def fill_missing(df: pd.DataFrame) -> pd.DataFrame:
 
 def convert_types(df: pd.DataFrame) -> pd.DataFrame:
     """
-    Convert the types of columns in a DataFrame
-
-    If a column contains "date", it is converted to datetime type.
-    If a column is of object type, it is converted to numeric type if possible, otherwise left as is.
+    Convert column types in a DataFrame:
+    - Columns named "date" (case-insensitive) are converted to datetime (UTC).
+    - Object columns are converted to numeric if possible, unless clearly categorical (like Ticker).
 
     Args:
-         df (pd.DataFrame) : the DataFrame in which to convert types
+        df (pd.DataFrame) : The DataFrame in which to convert column types
 
     Returns:
-        pd.DataFrame :the DataFrame with types converted
+        pd.DataFrame : the DataFrame with column types converted
     """
     for col in df.select_dtypes(include=["object"]).columns:
-        if "date" in col:
-            df[col] = pd.to_datetime(df[col], errors="coerce")
+        # Handle dates explicitly
+        if col.lower() == "date":
+            df[col] = pd.to_datetime(df[col], errors="coerce", utc=True)
+        
+        # Skip known categorical/string columns
+        elif col.lower() in ["ticker", "symbol", "name"]:
+            continue  
+
+        # Try converting the rest to numeric
         else:
-            df[col] = pd.to_numeric(df[col], errors="ignore")
+            df[col] = pd.to_numeric(df[col], errors="coerce")
+
     return df
-
-
 def remove_outliers(df: pd.DataFrame) -> pd.DataFrame:
     """
     Remove outliers from a DataFrame
