@@ -1,5 +1,3 @@
-
-````markdown
 # analytics-dashboard
 
 This application fetches live stock data from Yahoo Finance and applies a time series predictive model to forecast stock performance. The results are displayed in an interactive web interface where you can:
